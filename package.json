@@ -12,6 +12,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react-swc": "^3.7.2",
+    "fp-ts": "^2.16.9",
     "typescript": "^5.7.2",
     "vite": "^6.0.3"
   },

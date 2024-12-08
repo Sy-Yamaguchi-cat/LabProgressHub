@@ -1,12 +1,12 @@
-type AuthenticationState = UnAuthenticatedState | AuthenticatedState;
+export type AuthenticationState = UnAuthenticatedState | AuthenticatedState;
 
-type UnAuthenticatedState = { isAuthenticated: false };
-type AuthenticatedState = {
+export type UnAuthenticatedState = { isAuthenticated: false };
+export type AuthenticatedState = {
   isAuthenticated: true;
   user: UserInfo;
 };
 
-type UserInfo = {
+export type UserInfo = {
   uid: string;
   userName: string;
   userEmail: string;
