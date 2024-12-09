@@ -1,7 +1,7 @@
 import { MemberInfo, Project, Task, TaskStatus } from "@/domain/project";
 import { Either } from "fp-ts/es6/Either";
 
-type IMemberRepository = {
+export interface IMemberRepository {
   list(): Either<string[], Error>;
   create(userName: string, userEmail: string): Either<MemberInfo, Error>;
   read(menberUid: string): Either<MemberInfo, Error>;
@@ -11,9 +11,9 @@ type IMemberRepository = {
     userEmail: string,
   ): Either<MemberInfo, Error>;
   delete(menberUid: string): Either<null, Error>;
-};
+}
 
-type IProjectRepository = {
+export interface IProjectRepository {
   list(): Either<Project["uid"][], Error>;
   create(projectName: string): Either<Project, Error>;
   read(projectUid: Project["uid"]): Either<Project, Error>;
@@ -52,4 +52,4 @@ type IProjectRepository = {
     menberUid: MemberInfo["uid"],
     taskStatus: TaskStatus,
   ): Either<null, Error>;
-};
+}
