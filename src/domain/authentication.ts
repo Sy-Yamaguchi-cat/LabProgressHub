@@ -10,4 +10,5 @@ export type UserInfo = {
   uid: string;
   userName: string;
   userEmail: string;
+  userPhotoUrl?: string;
 };

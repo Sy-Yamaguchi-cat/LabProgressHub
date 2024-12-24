@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "tsc && vite build"
   },
   "author": "",
   "license": "MIT",
   "description": "",
   "devDependencies": {
+    "@tanstack/router-devtools": "^1.92.3",
+    "@tanstack/router-plugin": "^1.91.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react-swc": "^3.7.2",
@@ -19,8 +23,10 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.3.0",
     "@mui/material": "^6.3.0",
     "firebase": "^11.0.2",
+    "jotai": "^2.11.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }
