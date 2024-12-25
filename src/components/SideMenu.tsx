@@ -1,48 +1,18 @@
-import * as React from 'react';
-import { styled, SxProps, Theme } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
-import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import List, { ListProps } from "@mui/material/List";
 
-const drawerWidth = 240;
+import Drawer, { DrawerProps } from "@/layouts/Drawer";
 
-const Drawer = styled(MuiDrawer)({
-  width: drawerWidth,
-  flexShrink: 0,
-  boxSizing: 'border-box',
-  mt: 10,
-  [`& .${drawerClasses.paper}`]: {
-    width: drawerWidth,
-    boxSizing: 'border-box',
-  },
-});
+import { useAtomValue } from "jotai";
 
-type Props = {
-  children? : React.ReactNode,
-  className?: string;
-  sx?: SxProps<Theme>;
-}
+import { isSideMenuOpen } from "@/states/layout";
 
-export default function SideMenu(props: Props) {
-  return (
-    <Drawer
-      variant="permanent"
-      className={props.className}
-      sx={{
-        display: { xs: 'none', md: 'block' },
-        [`& .${drawerClasses.paper}`]: {
-          width: drawerWidth,
-          boxSizing: "border-box",
-          backgroundColor: 'background.paper',
-        },
-        ...props.sx
-      }}
-    >
-      {props.children}
-      
-      <Divider />
+export type Props = Omit<DrawerProps, "children"> & Pick<ListProps, "children">;
+
+export default function SideMenu({ children, ...restProps }: Props) {
+    const isOpen = useAtomValue(isSideMenuOpen);
+    return <Drawer open={isOpen} {...restProps} >
+        <List>
+            {children}
+        </List >
     </Drawer>
-  );
 }
