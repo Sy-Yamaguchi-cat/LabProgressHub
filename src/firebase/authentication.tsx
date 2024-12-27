@@ -22,7 +22,7 @@ export const signOut = () => {
 };
 
 export const authState = atom<AuthenticationState>({
-    isAuthenticated: false,
+  isAuthenticated: false,
 });
 
 export type AuthenticationContextProps = {
@@ -40,16 +40,16 @@ export function AuthenticationContext(props: AuthenticationContextProps) {
             userName: user.displayName,
             userEmail: user.email,
             userPhotoUrl: user.photoURL ?? undefined,
-            uid: user.uid
-          }
+            uid: user.uid,
+          },
         });
       } else {
         setAuthState({
-          isAuthenticated: false
+          isAuthenticated: false,
         });
       }
     });
-    return unsubscribe
+    return unsubscribe;
   }, [setAuthState]);
   return <>{props.children}</>;
 }

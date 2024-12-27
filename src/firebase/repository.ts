@@ -6,13 +6,13 @@ export class MemberRepository {
   create(
     menberUid: string,
     userName: string,
-    userEmail: string,
+    userEmail: string
   ): Either<MemberInfo, Error>;
   read(menberUid: string): Either<MemberInfo, Error>;
   update(
     menberUid: string,
     userName: string,
-    userEmail: string,
+    userEmail: string
   ): Either<MemberInfo, Error>;
   delete(menberUid: string): Either<null, Error>;
 }
@@ -23,37 +23,37 @@ export interface IProjectRepository {
   read(projectUid: Project["uid"]): Either<Project, Error>;
   update(
     projectUid: Project["uid"],
-    projectName: string,
+    projectName: string
   ): Either<MemberInfo, Error>;
   delete(projectUid: Project["uid"]): Either<null, Error>;
 
   assign(
     projectUid: Project["uid"],
-    menberUid: MemberInfo["uid"],
+    menberUid: MemberInfo["uid"]
   ): Either<null, Error>;
   release(
     projectUid: Project["uid"],
-    menberUid: MemberInfo["uid"],
+    menberUid: MemberInfo["uid"]
   ): Either<null, Error>;
 
   createTask(
     projectUid: Project["uid"],
-    contentName: string,
+    contentName: string
   ): Either<Task, Error>;
   updateTask(
     projectUid: Project["uid"],
     taskUid: Task["uid"],
-    contentName: string,
+    contentName: string
   ): Either<Task, Error>;
   deleteTask(
     projectUid: Project["uid"],
-    taskUid: Task["uid"],
+    taskUid: Task["uid"]
   ): Either<null, Error>;
 
   updateTaskStatus(
     projectUid: Project["uid"],
     taskUid: Task["uid"],
     menberUid: MemberInfo["uid"],
-    taskStatus: TaskStatus,
+    taskStatus: TaskStatus
   ): Either<null, Error>;
 }
