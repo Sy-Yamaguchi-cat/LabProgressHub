@@ -10,11 +10,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AppBar from "@/layouts/AppBar";
 
 import { useAtomValue, useSetAtom } from "jotai";
-import { signIn, signOut, authState } from "@/firebase/authentication";
+import { signIn, signOut, authStateAtom } from "@/firebase/authentication";
 import { isSideMenuOpen } from "@/states/layout";
 
 export default function AppNavbar() {
-  const authentication = useAtomValue(authState);
+  const authentication = useAtomValue(authStateAtom);
   const toggleSidebar = useSetAtom(isSideMenuOpen);
   return (
     <AppBar position="fixed">

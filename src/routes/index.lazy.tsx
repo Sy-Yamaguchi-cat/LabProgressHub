@@ -1,21 +1,30 @@
-import { createLazyFileRoute, redirect } from "@tanstack/react-router";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import Box from "@mui/material/Box";
 
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import MainContainer from "@/components/MainContainer";
 import SideMenu from "@/components/SideMenu";
 import SideMenuItem from "@/components/SideMenuItem";
 
-import { db } from "@/firebase/firestore";
+import {
+  usersCollectionAtom,
+  projetsCollectionAtom,
+} from "@/firebase/firestore/firestore";
+import { useAtomValue } from "jotai";
 
 export const Route = createLazyFileRoute("/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  console.log(db);
+  const users = useAtomValue(usersCollectionAtom);
+  const projects = useAtomValue(projetsCollectionAtom);
   return (
     <>
-      <MainContainer></MainContainer>
+      <MainContainer>
+        <Box>{JSON.stringify(users)}</Box>
+        <Box>{JSON.stringify(projects)}</Box>
+      </MainContainer>
       <SideMenu>
         <SideMenuItem
           label="Project"

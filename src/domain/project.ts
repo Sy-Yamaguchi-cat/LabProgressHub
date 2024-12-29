@@ -4,6 +4,8 @@ export type MemberInfo = {
   userName: string;
 };
 
+export type MemberInfoDict = Record<MemberInfo["uid"], MemberInfo>;
+
 export type Project = {
   uid: string;
   projectName: string;

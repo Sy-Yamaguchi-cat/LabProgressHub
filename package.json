@@ -25,9 +25,13 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.3.0",
     "@mui/material": "^6.3.0",
+    "@tanstack/query-core": "^5.62.9",
+    "@tanstack/react-query": "^5.62.11",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.2",
     "jotai": "^2.11.0",
+    "jotai-effect": "^1.0.7",
+    "jotai-tanstack-query": "^0.9.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }
