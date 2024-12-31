@@ -9,7 +9,8 @@ import SideMenuItem from "@/components/SideMenuItem";
 import {
   usersCollectionAtom,
   projetsCollectionAtom,
-} from "@/firebase/firestore/firestore";
+  tasksAtomFamily,
+} from "@/firebase/firestore";
 import { useAtomValue } from "jotai";
 
 export const Route = createLazyFileRoute("/")({
@@ -19,11 +20,20 @@ export const Route = createLazyFileRoute("/")({
 function RouteComponent() {
   const users = useAtomValue(usersCollectionAtom);
   const projects = useAtomValue(projetsCollectionAtom);
+  const project = Object.keys(projects)[0]
+  const tasks = useAtomValue(tasksAtomFamily(project))
+  
   return (
     <>
       <MainContainer>
+        <Box>users</Box>
         <Box>{JSON.stringify(users)}</Box>
+        <Box>projects</Box>
         <Box>{JSON.stringify(projects)}</Box>
+        <Box>project</Box>
+        <Box>{JSON.stringify(project)}</Box>
+        <Box>tasks</Box>
+        <Box>{JSON.stringify(tasks)}</Box>
       </MainContainer>
       <SideMenu>
         <SideMenuItem

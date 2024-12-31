@@ -4,8 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import {
   subscribeAuthentication,
-  subscribeUsersCollectionAtom,
-  subscribeProjetsCollectionAtom,
+  subscribeFirebaseDB,
 } from "@/firebase";
 import AppNavbar from "@/components/AppNavbar";
 import AppTheme from "@/theme/AppTheme";
@@ -19,8 +18,7 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   useAtom(subscribeAuthentication);
-  useAtom(subscribeUsersCollectionAtom);
-  useAtom(subscribeProjetsCollectionAtom);
+  useAtom(subscribeFirebaseDB);
   return (
     <QueryClientProvider client={queryClient}>
       <AppTheme>

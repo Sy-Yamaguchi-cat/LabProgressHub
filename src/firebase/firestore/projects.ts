@@ -1,4 +1,5 @@
 import { collection, query } from "firebase/firestore";
+import { toDate } from "date-fns";
 import { atom } from "jotai";
 
 import { db } from "./firestore";
@@ -11,7 +12,7 @@ type Project = {
   startDate: Date;
   endDate: Date;
 };
-const projetsCollectionRef = collection(db, "projects");
+export const projetsCollectionRef = collection(db, "projects");
 const projectsQuery = query(projetsCollectionRef);
 export const projetsCollectionAtom = atom<Record<string, Project>>({});
 export const subscribeProjetsCollectionAtom = firestoreSubscribeAtom(
@@ -24,9 +25,9 @@ export const subscribeProjetsCollectionAtom = firestoreSubscribeAtom(
         uid: doc.id,
         projectName: data["project_name"],
         description: data["description"],
-        startDate: data["start_date"],
-        endDate: data["end_date"],
+        startDate: toDate(data["start_date"]),
+        endDate: toDate(data["end_date"]),
       },
     };
-  }
+  },
 );

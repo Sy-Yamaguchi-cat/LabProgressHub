@@ -1,5 +1,2 @@
 export { subscribeAuthentication } from "./authentication";
-export {
-  subscribeUsersCollectionAtom,
-  subscribeProjetsCollectionAtom,
-} from "./firestore";
+export { subscribeFirebaseDB } from "./firestore";
