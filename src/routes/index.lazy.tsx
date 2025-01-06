@@ -1,40 +1,29 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import MainContainer from "@/components/MainContainer";
 import SideMenu from "@/components/SideMenu";
 import SideMenuItem from "@/components/SideMenuItem";
+import ContentBox from "@/components/ContentBox";
 
-import {
-  usersCollectionAtom,
-  projetsCollectionAtom,
-  tasksAtomFamily,
-} from "@/firebase/firestore";
+import { usersAtom, projectsAtom, projectAtomFamily } from "@/firebase/usecase";
 import { useAtomValue } from "jotai";
+import { ProgressTableContent } from "@/components/ProgressTableContent";
 
 export const Route = createLazyFileRoute("/")({
-  component: RouteComponent,
+  component: RouteComponent
 });
 
 function RouteComponent() {
-  const users = useAtomValue(usersCollectionAtom);
-  const projects = useAtomValue(projetsCollectionAtom);
-  const project = Object.keys(projects)[0]
-  const tasks = useAtomValue(tasksAtomFamily(project))
-  
+  const projects = useAtomValue(projectsAtom);
+  const contents = projects.map((projectUid) => (
+    <ProgressTableContent key={projectUid} projectUid={projectUid} />
+  ));
   return (
     <>
-      <MainContainer>
-        <Box>users</Box>
-        <Box>{JSON.stringify(users)}</Box>
-        <Box>projects</Box>
-        <Box>{JSON.stringify(projects)}</Box>
-        <Box>project</Box>
-        <Box>{JSON.stringify(project)}</Box>
-        <Box>tasks</Box>
-        <Box>{JSON.stringify(tasks)}</Box>
-      </MainContainer>
+      <MainContainer>{contents}</MainContainer>
       <SideMenu>
         <SideMenuItem
           label="Project"
@@ -42,8 +31,8 @@ function RouteComponent() {
             {
               label: "Home",
               to: "/",
-              icon: <HomeRoundedIcon />,
-            },
+              icon: <HomeRoundedIcon />
+            }
           ]}
         />
       </SideMenu>

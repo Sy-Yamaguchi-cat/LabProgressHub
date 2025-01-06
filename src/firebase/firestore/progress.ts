@@ -13,6 +13,7 @@ type Progress = {
   uid: string;
   projectUid: string;
   taskUid: string;
+  userUid: string;
   done: boolean;
   deadline?: Date;
   percentage?: number;
@@ -43,6 +44,7 @@ const subscribeProgressCollectionAtomFamily = atomFamily(
             uid: doc.id,
             projectUid: data["project_uid"].id,
             taskUid: data["task_uid"].id,
+            userUid: data["user_uid"].id,
             done: data["done"],
             deadline: data["deadline"],
             percentage: data["percentage"],
