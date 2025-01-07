@@ -14,23 +14,22 @@ type Progress = {
   projectUid: string;
   taskUid: string;
   userUid: string;
-  done: boolean;
-  deadline?: Date;
+  deadline?: string;
   percentage?: number;
   text?: string;
 };
-const progressCollectionRef = collection(db, "progress");
+export const progressCollectionRef = collection(db, "progress");
 const progressQueryFamily = (key: { projectUid: string; taskUid: string }) =>
   query(
     progressCollectionRef,
     where("project_uid", "==", doc(projetsCollectionRef, key.projectUid)),
-    where("task_uid", "==", doc(tasksCollectionRef, key.taskUid)),
+    where("task_uid", "==", doc(tasksCollectionRef, key.taskUid))
   );
 
 export const progressAtomFamily = atomFamily(
   (key: { projectUid: string; taskUid: string }) =>
     atom<Record<string, Progress>>({}),
-  deepEqual,
+  deepEqual
 );
 const subscribeProgressCollectionAtomFamily = atomFamily(
   (key: { projectUid: string; taskUid: string }) =>
@@ -45,14 +44,13 @@ const subscribeProgressCollectionAtomFamily = atomFamily(
             projectUid: data["project_uid"].id,
             taskUid: data["task_uid"].id,
             userUid: data["user_uid"].id,
-            done: data["done"],
             deadline: data["deadline"],
             percentage: data["percentage"],
-            text: data["text"],
-          },
+            text: data["text"]
+          }
         };
-      },
-    ),
+      }
+    )
 );
 
 export const subscribeProgressCollectionAtom = atom((get) => {
@@ -63,8 +61,8 @@ export const subscribeProgressCollectionAtom = atom((get) => {
       get(
         subscribeProgressCollectionAtomFamily({
           projectUid: project,
-          taskUid: task,
-        }),
+          taskUid: task
+        })
       );
     }
   }

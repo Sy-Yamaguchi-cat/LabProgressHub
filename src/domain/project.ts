@@ -25,7 +25,6 @@ export type Task = {
 
 export type TaskStatus = {
   uid: string;
-  done: boolean;
   deadline?: Date;
   percentage?: number;
   text?: string;

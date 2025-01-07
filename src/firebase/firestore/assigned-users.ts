@@ -11,14 +11,14 @@ type AssignedUsers = {
   projectUid: string;
   userUid: string;
 };
-const assignedUsersCollectionRef = collection(db, "assigned-users");
+export const assignedUsersCollectionRef = collection(db, "assigned-users");
 const assignedUsersQueryFamily = (projectUid: string) =>
   query(
     assignedUsersCollectionRef,
-    where("project_uid", "==", doc(projetsCollectionRef, projectUid)),
+    where("project_uid", "==", doc(projetsCollectionRef, projectUid))
   );
 export const assignedUsersAtomFamily = atomFamily((projectUid: string) =>
-  atom<Record<string, AssignedUsers>>({}),
+  atom<Record<string, AssignedUsers>>({})
 );
 const subscribeAssignedUsersCollectionAtomFamily = atomFamily(
   (projectUid: string) =>
@@ -31,11 +31,11 @@ const subscribeAssignedUsersCollectionAtomFamily = atomFamily(
           [doc.id]: {
             uid: doc.id,
             projectUid: data["project_uid"].id,
-            userUid: data["user_uid"].id,
-          },
+            userUid: data["user_uid"].id
+          }
         };
-      },
-    ),
+      }
+    )
 );
 
 export const subscribeAssignedUsersCollectionAtom = atom((get) => {

@@ -1,79 +1,154 @@
 import { atom } from "jotai";
 
-import {
-  usersCollectionAtom,
-  projetsCollectionAtom,
-  tasksAtomFamily,
-  progressAtomFamily,
-  assignedUsersAtomFamily
-} from "./firestore";
-import { Project, Task, TaskStatus } from "@/domain/project";
-import { atomFamily } from "jotai/utils";
+import { usersCollectionRef } from "./firestore/users";
+import { tasksCollectionRef, Task as TaskDB } from "./firestore/tasks";
+import { projetsCollectionRef } from "./firestore/projects";
+import { progressCollectionRef } from "./firestore/progress";
+import { assignedUsersCollectionRef } from "./firestore/assigned-users";
 
-export const usersAtom = atom((get) => {
-  const users = get(usersCollectionAtom);
-  return Object.values(users);
-});
+import { doc, runTransaction } from "firebase/firestore";
+import { format } from "date-fns";
+import { db } from "./firestore/firestore";
 
-export const projectsAtom = atom((get) => {
-  const rawProjects = get(projetsCollectionAtom);
-  const sortedProjects = Object.values(rawProjects).sort(
-    (a, b) => a.startDate.getTime() - b.startDate.getTime()
-  );
-  return sortedProjects.map((project) => project.uid);
-});
-
-export const projectAtomFamily = atomFamily((projectUid: string) =>
-  atom((get) => {
-    const projects = get(projetsCollectionAtom);
-    const rawProject = projects[projectUid];
-    if (rawProject == undefined) {
-      return null;
-    }
-    const users = get(usersCollectionAtom);
-    const rawAssignedUsers = get(assignedUsersAtomFamily(projectUid));
-    const assignedUsers = Object.fromEntries(
-      Object.values(rawAssignedUsers)
-        .map(({ userUid }) => userUid)
-        .filter((userUid) => userUid in users)
-        .map((userUid) => [userUid, users[userUid]])
-    );
-    const rawTasks = get(tasksAtomFamily(projectUid));
-    const tasks: Task[] = Object.entries(rawTasks)
-      .sort((a, b) => a[1].order - b[1].order)
-      .map(([taskUid, rawTask]) => {
-        const rawStatus = get(progressAtomFamily({ projectUid, taskUid }));
-        const status = Object.fromEntries(
-          Object.entries(rawStatus)
-            .map(([statusUid, rawStatus]) => {
-              const status: TaskStatus = {
-                uid: statusUid,
-                done: rawStatus.done,
-                deadline: rawStatus.deadline,
-                percentage: rawStatus.percentage,
-                text: rawStatus.text
-              };
-              return [rawStatus.userUid, status] as const;
-            })
-            .filter(([userUid]) => userUid in assignedUsers)
-        );
-        const task: Task = {
-          uid: taskUid,
-          contentName: rawTask.taskName,
-          comment: rawTask.comment,
-          status
-        };
-        return task;
-      });
-    const project: Project = {
-      uid: projectUid,
-      projectName: rawProject.projectName,
-      description: rawProject.description,
-      startDate: rawProject.startDate,
-      endDate: rawProject.endDate,
-      assignedUsers: assignedUsers,
-      tasks
+type EditTaskProps = {
+  projectUid: string;
+  taskUid?: string;
+  taskName: string;
+  comment?: string;
+  order: number;
+};
+export const editTask = async ({
+  projectUid,
+  taskUid,
+  taskName,
+  comment,
+  order
+}: EditTaskProps) => {
+  console.log("editTask ", {
+    projectUid,
+    taskUid,
+    taskName,
+    comment,
+    order
+  });
+  return runTransaction(db, async (transaction) => {
+    const task = {
+      project_uid: doc(projetsCollectionRef, projectUid),
+      task_name: taskName,
+      ...(comment && { comment }),
+      order
     };
-    return project;
-  })
-);
+    const documentRef =
+      taskUid != undefined
+        ? doc(tasksCollectionRef, taskUid)
+        : doc(tasksCollectionRef);
+    const document = await transaction.get(documentRef);
+    if (document.exists()) {
+      transaction.update(documentRef, task);
+      return document.id;
+    } else {
+      transaction.set(documentRef, task);
+      return document.id;
+    }
+  });
+};
+
+type AssignUserProps = {
+  projectUid: string;
+  userUid: string;
+};
+export const assignUser = async ({ projectUid, userUid }: AssignUserProps) => {
+  console.log("assignUser", { projectUid, userUid });
+  return runTransaction(db, async (transaction) => {
+    const document = doc(assignedUsersCollectionRef);
+    transaction.set(document, {
+      project_uid: doc(projetsCollectionRef, projectUid),
+      user_uid: doc(usersCollectionRef, userUid)
+    });
+    return document.id;
+  });
+};
+
+type EditProgressProps = {
+  projectUid: string;
+  taskUid: string;
+  userUid: string;
+  deadline?: Date;
+  percentage?: number;
+  text?: string;
+  progressUid?: string;
+};
+export const editProgress = async ({
+  projectUid,
+  taskUid,
+  userUid,
+  deadline,
+  percentage,
+  text,
+  progressUid
+}: EditProgressProps) => {
+  console.log("editProgress", {
+    projectUid,
+    taskUid,
+    userUid,
+    deadline,
+    percentage,
+    text,
+    progressUid
+  });
+  return runTransaction(db, async (transaction) => {
+    const progress = {
+      project_uid: doc(projetsCollectionRef, projectUid),
+      task_uid: doc(tasksCollectionRef, taskUid),
+      user_uid: doc(usersCollectionRef, userUid),
+      ...(deadline && {
+        deadline: format(deadline, "yyyy-MM-dd")
+      }),
+      ...(percentage && { percentage }),
+      ...(text ? { text } : { text: null })
+    };
+
+    const documentRef = progressUid
+      ? doc(progressCollectionRef, progressUid)
+      : doc(progressCollectionRef);
+    const document = await transaction.get(documentRef);
+
+    if (document.exists()) {
+      transaction.update(documentRef, progress);
+    } else {
+      transaction.set(documentRef, progress);
+    }
+    return documentRef.id;
+  });
+};
+
+type RegisterUserProps = {
+  userUid: string;
+  userName: string;
+  userEmail: string;
+};
+export const registerUser = async ({
+  userUid,
+  userName,
+  userEmail
+}: RegisterUserProps) => {
+  console.log(registerUser, {
+    userUid,
+    userName,
+    userEmail
+  });
+  return await runTransaction(db, async (transaction) => {
+    const user = {
+      user_name: userName,
+      user_email: userEmail
+    };
+    const documentRef = doc(usersCollectionRef, userUid);
+    const document = await transaction.get(documentRef);
+    if (document.exists()) {
+      transaction.update(documentRef, user);
+    } else {
+      transaction.set(documentRef, user);
+    }
+    return document.id;
+  });
+};

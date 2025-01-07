@@ -9,7 +9,7 @@ type User = {
   userName: string;
   userEmail: string;
 };
-const usersCollectionRef = collection(db, "users");
+export const usersCollectionRef = collection(db, "users");
 const usersQuery = query(usersCollectionRef);
 export const usersCollectionAtom = atom<Record<string, User>>({});
 export const subscribeUsersCollectionAtom = firestoreSubscribeAtom(
@@ -21,8 +21,8 @@ export const subscribeUsersCollectionAtom = firestoreSubscribeAtom(
       [doc.id]: {
         uid: doc.id,
         userName: data["user_name"],
-        userEmail: data["user_email"],
-      },
+        userEmail: data["user_email"]
+      }
     };
   }
 );

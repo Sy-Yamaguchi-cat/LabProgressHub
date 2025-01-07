@@ -6,7 +6,7 @@ import { db } from "./firestore";
 import { firestoreSubscribeAtom } from "./utils";
 import { projetsCollectionAtom, projetsCollectionRef } from "./projects";
 
-type Task = {
+export type Task = {
   uid: string;
   projectUid: string;
   taskName: string;
@@ -17,10 +17,10 @@ export const tasksCollectionRef = collection(db, "tasks");
 const tasksQueryFamily = (projectUid: string) =>
   query(
     tasksCollectionRef,
-    where("project_uid", "==", doc(projetsCollectionRef, projectUid)),
+    where("project_uid", "==", doc(projetsCollectionRef, projectUid))
   );
 export const tasksAtomFamily = atomFamily((projectUid: string) =>
-  atom<Record<string, Task>>({}),
+  atom<Record<string, Task>>({})
 );
 const subscribeTasksCollectionAtomFamily = atomFamily((projectUid: string) =>
   firestoreSubscribeAtom(
@@ -34,11 +34,11 @@ const subscribeTasksCollectionAtomFamily = atomFamily((projectUid: string) =>
           projectUid: data["project_uid"].id,
           taskName: data["task_name"],
           comment: data["comment"],
-          order: data["order"],
-        },
+          order: data["order"]
+        }
       };
-    },
-  ),
+    }
+  )
 );
 
 export const subscribeTasksCollectionAtom = atom((get) => {

@@ -15,16 +15,17 @@ export type Navigation = {
   label: string;
   to: string;
   icon?: React.ReactNode;
+  dense?: boolean;
 };
 
-function SideMenuItemNavigation({ label, to, icon }: Navigation) {
+function SideMenuItemNavigation({ label, to, icon, dense }: Navigation) {
   return (
-    <ListItem disablePadding dense>
+    <ListItem disablePadding dense={dense}>
       <ListItemButton component={Link} to={to}>
         {icon && <ListItemIcon>{icon}</ListItemIcon>}
         <ListItemText
           slotProps={{
-            primary: { noWrap: true },
+            primary: { noWrap: true }
           }}
         >
           {label}
@@ -41,7 +42,7 @@ export type SideMenuItemProps = {
 
 export default function SideMenuItem({
   label,
-  navigations,
+  navigations
 }: SideMenuItemProps) {
   const [isToggleOpen, setToggle] = useState(true);
   return (
@@ -52,7 +53,7 @@ export default function SideMenuItem({
             <KeyboardArrowDown
               sx={{
                 transition: "0.2s",
-                transform: isToggleOpen ? "rotate(-180deg)" : "rotate(0)",
+                transform: isToggleOpen ? "rotate(-180deg)" : "rotate(0)"
               }}
             />
           </IconButton>
@@ -62,7 +63,7 @@ export default function SideMenuItem({
           sx={{ flexGrow: 1 }}
           primary={label}
           slotProps={{
-            primary: { variant: "h5", noWrap: true },
+            primary: { variant: "h5", noWrap: true }
           }}
         />
       </ListItem>

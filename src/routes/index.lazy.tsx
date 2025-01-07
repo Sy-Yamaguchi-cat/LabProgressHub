@@ -1,16 +1,12 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import MainContainer from "@/components/MainContainer";
 import SideMenu from "@/components/SideMenu";
-import SideMenuItem from "@/components/SideMenuItem";
-import ContentBox from "@/components/ContentBox";
+import SideMenuNavigation from "@/components/SidemenuNavigation";
 
-import { usersAtom, projectsAtom, projectAtomFamily } from "@/firebase/usecase";
+import { projectsAtom } from "@/firebase/store";
 import { useAtomValue } from "jotai";
-import { ProgressTableContent } from "@/components/ProgressTableContent";
+import { ProgressTableContent } from "@/components/ProgressTable/ProgressTableContent";
 
 export const Route = createLazyFileRoute("/")({
   component: RouteComponent
@@ -25,16 +21,7 @@ function RouteComponent() {
     <>
       <MainContainer>{contents}</MainContainer>
       <SideMenu>
-        <SideMenuItem
-          label="Project"
-          navigations={[
-            {
-              label: "Home",
-              to: "/",
-              icon: <HomeRoundedIcon />
-            }
-          ]}
-        />
+        <SideMenuNavigation />
       </SideMenu>
     </>
   );
