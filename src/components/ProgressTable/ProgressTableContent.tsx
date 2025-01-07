@@ -124,7 +124,7 @@ export function ProgressTableContent({ projectUid }: Props) {
     </>
   );
   return (
-    <ContentBox key={projectUid}>
+    <ContentBox key={projectUid} id={projectUid}>
       {titleComponent}
       {subTitleComponents}
       {progressTable}

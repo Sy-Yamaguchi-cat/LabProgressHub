@@ -7,7 +7,7 @@ import InfoIcon from "@mui/icons-material/Info";
 export default function SideMenuNavigation() {
   return (
     <SideMenuItem
-      label="Project"
+      label="Links"
       navigations={[
         {
           label: "Home",

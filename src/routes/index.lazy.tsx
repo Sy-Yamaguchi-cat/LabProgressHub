@@ -7,6 +7,7 @@ import SideMenuNavigation from "@/components/SidemenuNavigation";
 import { projectsAtom } from "@/firebase/store";
 import { useAtomValue } from "jotai";
 import { ProgressTableContent } from "@/components/ProgressTable/ProgressTableContent";
+import ProjectNavigation from "@/components/ProjectNavigation";
 
 export const Route = createLazyFileRoute("/")({
   component: RouteComponent
@@ -22,6 +23,7 @@ function RouteComponent() {
       <MainContainer>{contents}</MainContainer>
       <SideMenu>
         <SideMenuNavigation />
+        <ProjectNavigation />
       </SideMenu>
     </>
   );
