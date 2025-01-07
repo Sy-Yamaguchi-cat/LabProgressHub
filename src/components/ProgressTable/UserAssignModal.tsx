@@ -1,3 +1,4 @@
+import { use, useState } from "react";
 import Modal from "@mui/material/Modal";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid2";
@@ -13,11 +14,14 @@ import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { Project } from "@/domain/project";
-import { useState } from "react";
 
 import { usersAtom } from "@/firebase/store";
 import { useAtomValue } from "jotai";
-import { assignUser } from "@/firebase/usecase";
+import { useAtomCallback } from 'jotai/utils'
+import { assignUser, unAssignUser } from "@/firebase/usecase";
+import { authStateAtom } from "@/firebase/authentication";
+import { assignedUsersAtomFamily } from "@/firebase/firestore";
+
 
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
@@ -35,11 +39,21 @@ export type Props = {
   onClose: () => void;
   project: Project;
 };
-export default function UserAssignModal(props: Props) {
+export default function UserAssignModal({ open, onClose, project }: Props) {
   const [error, setError] = useState<string | null>(null);
   const users = useAtomValue(usersAtom);
+  const triggerUnAssign = useAtomCallback((get, set, userUid: string) => {
+    const assignedUsers = get(assignedUsersAtomFamily(project.uid))
+    const assignedUser = Object.values(assignedUsers)
+      .find(({ userUid : targetUserUid })=> userUid == targetUserUid);
+    if (!assignedUser) {
+      setError(`User ${userUid} is not assigned to this porject.`);
+      return;
+    }
+    return unAssignUser({ assignedUsersUid: assignedUser.uid });
+  })
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={open} onClose={onClose}>
       <Card
         sx={(theme) => ({
           position: "absolute",
@@ -50,7 +64,7 @@ export default function UserAssignModal(props: Props) {
         })}
       >
         <Typography variant="subtitle1" color="textDisabled">
-          Project &gt; {props.project.projectName}
+          Project &gt; {project.projectName}
         </Typography>
         <Typography variant="h3" gutterBottom>
           Assign user
@@ -98,16 +112,20 @@ export default function UserAssignModal(props: Props) {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    {user.uid in props.project.assignedUsers ? (
-                      <Button variant="outlined" disabled>
-                        Assigned
+                    {user.uid in project.assignedUsers ? (
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => triggerUnAssign(user.uid)}
+                      >
+                        UnAssign
                       </Button>
                     ) : (
                       <Button
                         variant="outlined"
                         onClick={() =>
                           assignUser({
-                            projectUid: props.project.uid,
+                            projectUid: project.uid,
                             userUid: user.uid
                           })
                         }
@@ -122,7 +140,7 @@ export default function UserAssignModal(props: Props) {
           </Table>
         </TableContainer>
         <ButtonContainer>
-          <Button variant="outlined" color="secondary" onClick={props.onClose}>
+          <Button variant="outlined" color="secondary" onClick={onClose}>
             Cancel
           </Button>
         </ButtonContainer>

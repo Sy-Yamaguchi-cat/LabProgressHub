@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 
 import { db } from "./firestore";
-import { projetsCollectionRef, projetsCollectionAtom } from "./projects";
+import { projectsCollectionRef, projetsCollectionAtom } from "./projects";
 import { firestoreSubscribeAtom } from "./utils";
 
 type AssignedUsers = {
@@ -15,10 +15,10 @@ export const assignedUsersCollectionRef = collection(db, "assigned-users");
 const assignedUsersQueryFamily = (projectUid: string) =>
   query(
     assignedUsersCollectionRef,
-    where("project_uid", "==", doc(projetsCollectionRef, projectUid))
+    where("project_uid", "==", doc(projectsCollectionRef, projectUid)),
   );
 export const assignedUsersAtomFamily = atomFamily((projectUid: string) =>
-  atom<Record<string, AssignedUsers>>({})
+  atom<Record<string, AssignedUsers>>({}),
 );
 const subscribeAssignedUsersCollectionAtomFamily = atomFamily(
   (projectUid: string) =>
@@ -31,11 +31,11 @@ const subscribeAssignedUsersCollectionAtomFamily = atomFamily(
           [doc.id]: {
             uid: doc.id,
             projectUid: data["project_uid"].id,
-            userUid: data["user_uid"].id
-          }
+            userUid: data["user_uid"].id,
+          },
         };
-      }
-    )
+      },
+    ),
 );
 
 export const subscribeAssignedUsersCollectionAtom = atom((get) => {

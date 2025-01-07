@@ -12,8 +12,8 @@ type Project = {
   startDate: Date;
   endDate: Date;
 };
-export const projetsCollectionRef = collection(db, "projects");
-const projectsQuery = query(projetsCollectionRef);
+export const projectsCollectionRef = collection(db, "projects");
+const projectsQuery = query(projectsCollectionRef);
 export const projetsCollectionAtom = atom<Record<string, Project>>({});
 export const subscribeProjetsCollectionAtom = firestoreSubscribeAtom(
   projetsCollectionAtom,

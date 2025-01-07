@@ -6,7 +6,7 @@ import deepEqual from "fast-deep-equal";
 import { db } from "./firestore";
 import { firestoreSubscribeAtom } from "./utils";
 
-import { projetsCollectionRef, projetsCollectionAtom } from "./projects";
+import { projectsCollectionRef, projetsCollectionAtom } from "./projects";
 import { tasksCollectionRef, tasksAtomFamily } from "./tasks";
 
 type Progress = {
@@ -19,17 +19,20 @@ type Progress = {
   text?: string;
 };
 export const progressCollectionRef = collection(db, "progress");
-const progressQueryFamily = (key: { projectUid: string; taskUid: string }) =>
+export const progressQueryFamily = (key: {
+  projectUid: string;
+  taskUid: string;
+}) =>
   query(
     progressCollectionRef,
-    where("project_uid", "==", doc(projetsCollectionRef, key.projectUid)),
-    where("task_uid", "==", doc(tasksCollectionRef, key.taskUid))
+    where("project_uid", "==", doc(projectsCollectionRef, key.projectUid)),
+    where("task_uid", "==", doc(tasksCollectionRef, key.taskUid)),
   );
 
 export const progressAtomFamily = atomFamily(
   (key: { projectUid: string; taskUid: string }) =>
     atom<Record<string, Progress>>({}),
-  deepEqual
+  deepEqual,
 );
 const subscribeProgressCollectionAtomFamily = atomFamily(
   (key: { projectUid: string; taskUid: string }) =>
@@ -46,11 +49,11 @@ const subscribeProgressCollectionAtomFamily = atomFamily(
             userUid: data["user_uid"].id,
             deadline: data["deadline"],
             percentage: data["percentage"],
-            text: data["text"]
-          }
+            text: data["text"],
+          },
         };
-      }
-    )
+      },
+    ),
 );
 
 export const subscribeProgressCollectionAtom = atom((get) => {
@@ -61,8 +64,8 @@ export const subscribeProgressCollectionAtom = atom((get) => {
       get(
         subscribeProgressCollectionAtomFamily({
           projectUid: project,
-          taskUid: task
-        })
+          taskUid: task,
+        }),
       );
     }
   }

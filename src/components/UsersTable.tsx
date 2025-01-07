@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -32,60 +33,59 @@ export default function UsersTable() {
     });
   };
   return (
-    <TableContainer component={Paper}>
-      <Typography variant="subtitle1" color="error">
-        {error}
-      </Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell component="th">
-              <Typography variant="h6">Name</Typography>
-            </TableCell>
-            <TableCell component="th">
-              <Typography variant="h6">Email</Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.uid}>
-              <TableCell component="th" scope="row">
-                <Typography
-                  variant="body1"
-                  display="inline"
-                  textAlign="end"
-                  noWrap
-                >
-                  {user.userName}
-                </Typography>
+    <>
+      <TableContainer component={Paper}>
+        <Typography variant="subtitle1" color="error">
+          {error}
+        </Typography>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell component="th">
+                <Typography variant="h6">Name</Typography>
               </TableCell>
-              <TableCell>
-                <Typography
-                  variant="body1"
-                  display="inline"
-                  textAlign="end"
-                  noWrap
-                >
-                  {user.userEmail}
-                </Typography>
+              <TableCell component="th">
+                <Typography variant="h6">Email</Typography>
               </TableCell>
             </TableRow>
-          ))}
-          <TableRow>
-            <TableCell>
-              <Button
-                variant="outlined"
-                startIcon={<AddCircleOutlineIcon fontSize="inherit" />}
-                onClick={registerYourself}
-              >
-                Register Yourself
-              </Button>
-            </TableCell>
-            <TableCell />
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.uid}>
+                <TableCell component="th" scope="row">
+                  <Typography
+                    variant="body1"
+                    display="inline"
+                    textAlign="end"
+                    noWrap
+                  >
+                    {user.userName}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography
+                    variant="body1"
+                    display="inline"
+                    textAlign="end"
+                    noWrap
+                  >
+                    {user.userEmail}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Stack direction="row" spacing={2} sx={{margin: 1}}>
+        <Button
+          variant="outlined"
+          startIcon={<AddCircleOutlineIcon fontSize="inherit" />}
+          onClick={registerYourself}
+        >
+          Register Yourself
+        </Button>
+      </Stack>
+    </>
   );
 }
