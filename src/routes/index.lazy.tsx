@@ -6,23 +6,26 @@ import MainContainer from "@/components/MainContainer";
 import SideMenu from "@/components/SideMenu";
 import SideMenuNavigation from "@/components/SidemenuNavigation";
 import ProjectNavigation from "@/components/ProjectNavigation";
+import SearchConfigController from "@/components/SearchConfigController";
+
 
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 
-import { projectsAtom } from "@/firebase/store";
+import { currentProjectsAtom } from "@/firebase/store";
 import { useAtomValue } from "jotai";
 import { ProgressTableContent } from "@/components/ProgressTable/ProgressTableContent";
 import { useState } from "react";
 import ProjectEditModal, { ProjectEditState } from "@/components/ProjectEditModal";
+
 
 export const Route = createLazyFileRoute("/")({
   component: RouteComponent
 });
 
 function RouteComponent() {
-  const projects = useAtomValue(projectsAtom);
+  const projects = useAtomValue(currentProjectsAtom);
   
   const [isProjectEditModalOpen, setIsProjectEditModalOpen] = useState(false)
   const [newProjectInfo, setNewProjectInfo] = useState<ProjectEditState>({});
@@ -31,29 +34,34 @@ function RouteComponent() {
     setIsProjectEditModalOpen(true);
   }
 
-  const contents = projects.map((projectUid) => (
+  const projectAddButton = (
+    <Box sx={(theme) => ({margin: theme.spacing(3)})}>
+      <Button
+        sx={{width:"100%"}}
+        variant="outlined"
+        startIcon={<AddCircleOutlineIcon />}
+        onClick={() => {
+          setNewProjectInfo({});
+          setIsProjectEditModalOpen(true);
+        }}
+      >
+        Add a new project
+      </Button>
+    </Box>
+  );
+
+  const contents = projects.map(({uid}) => (
     <ProgressTableContent
-      key={projectUid}
-      projectUid={projectUid}
+      key={uid}
+      projectUid={uid}
       editProject={editProject}
     />
   ));
   return (
     <>
       <MainContainer>
-        <Box sx={(theme) => ({margin: theme.spacing(3)})}>
-          <Button
-            sx={{width:"100%"}}
-            variant="outlined"
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => {
-              setNewProjectInfo({});
-              setIsProjectEditModalOpen(true);
-            }}
-          >
-            Add a new project
-          </Button>
-        </Box>        
+        <SearchConfigController />
+        {projectAddButton}
         {contents}
       </MainContainer>
       <SideMenu>

@@ -10,6 +10,9 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import MuiLink from "@mui/material/Link";
+
+import { Link } from "@tanstack/react-router";
 
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
@@ -67,7 +70,7 @@ export default function UserAssignModal({ open, onClose, project }: Props) {
           Project &gt; {project.projectName}
         </Typography>
         <Typography variant="h3" gutterBottom>
-          Assign user
+          Assign users
         </Typography>
         <Typography variant="body2" color="error">
           {error}
@@ -139,6 +142,12 @@ export default function UserAssignModal({ open, onClose, project }: Props) {
             </TableBody>
           </Table>
         </TableContainer>
+        <Typography variant="body1" color="info" sx={{ marginTop: 2 }}>
+          If your name is not listed in the table, you can register yourself on the {" "}
+          <MuiLink component={Link} color="info" to="./users">
+            Users page
+          </MuiLink>.
+        </Typography>
         <ButtonContainer>
           <Button variant="outlined" color="secondary" onClick={onClose}>
             Cancel

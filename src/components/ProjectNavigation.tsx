@@ -1,10 +1,10 @@
 import SideMenuItem from "./SideMenuItem";
 
-import { projetsCollectionAtom } from "@/firebase/firestore/projects";
+import { currentProjectsAtom } from "@/firebase/store";
 import { useAtomValue } from "jotai";
 
 export default function ProjectNavigation() {
-  const projects = useAtomValue(projetsCollectionAtom);
+  const projects = useAtomValue(currentProjectsAtom);
   return (
     <SideMenuItem
       label="Project"

@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,6 +11,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 import TaskTitleCell from "./TaskTitleCell";
 import ProgressCell from "./ProgressCell";
@@ -76,8 +78,10 @@ export default function ProgressTable({
           ))}
           <TableRow>
             <TableCell component="th" scope="row">
-              <IconButton size="small" onClick={assignUser}>
-                <AddCircleOutlineIcon fontSize="inherit" />
+              <IconButton
+                onClick={assignUser}
+              >
+                <PersonAddAltIcon />
               </IconButton>
             </TableCell>
             {project.tasks.map((task) => {

@@ -38,7 +38,7 @@ export default function UsersTable() {
         <Typography variant="subtitle1" color="error">
           {error}
         </Typography>
-        <Table>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell component="th">
