@@ -1,8 +1,9 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
 import CircularProgress, {
-  CircularProgressProps
+  CircularProgressProps,
 } from "@mui/material/CircularProgress";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -45,11 +46,13 @@ export default function ProgressCell({ task, user, editStatus }: Props) {
   );
   return (
     <HoverVisTableCell key={task.uid}>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        {progressCircle}
-        {deadline}
+      <Stack alignItems="center" spacing={1}>
+        <Stack direction="row" alignItems="center">
+          {progressCircle}
+          {deadline}
+        </Stack>
         {text}
-      </Box>
+      </Stack>
       <IconButton
         className={hoverShowClass}
         size="small"
@@ -63,11 +66,11 @@ export default function ProgressCell({ task, user, editStatus }: Props) {
 
 const ContentBox = styled(Box)(({ theme }) => ({
   marginLeft: theme.spacing(1),
-  marginRight: theme.spacing(1)
+  marginRight: theme.spacing(1),
 }));
 
 function CircularProgressWithLabel(
-  props: CircularProgressProps & { value: number }
+  props: CircularProgressProps & { value: number },
 ) {
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
@@ -81,7 +84,7 @@ function CircularProgressWithLabel(
           position: "absolute",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         <Typography
