@@ -12,7 +12,7 @@ export type Props = {
 };
 export default function TaskTitleCell({ task, editTask }: Props) {
   return (
-    <HoverVisTableCell component="th" key={task.uid} sx={{ minWidth: 250 }}>
+    <HoverVisTableCell component="th" key={task.uid} sx={{ minWidth: 190 }}>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h6" display="inline" textAlign="end" noWrap>
