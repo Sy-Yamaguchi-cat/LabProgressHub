@@ -7,8 +7,7 @@ import SideMenu from "@/components/SideMenu";
 import SideMenuNavigation from "@/components/SidemenuNavigation";
 import ProjectNavigation from "@/components/ProjectNavigation";
 import SearchConfigController from "@/components/SearchConfigController";
-
-
+import SigninAlertContent from "@/components/SigninAlertContent";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -18,6 +17,7 @@ import { useAtomValue } from "jotai";
 import { ProgressTableContent } from "@/components/ProgressTable/ProgressTableContent";
 import { useState } from "react";
 import ProjectEditModal, { ProjectEditState } from "@/components/ProjectEditModal";
+import { authStateAtom } from "@/firebase/authentication";
 
 
 export const Route = createLazyFileRoute("/")({
@@ -26,6 +26,7 @@ export const Route = createLazyFileRoute("/")({
 
 function RouteComponent() {
   const projects = useAtomValue(currentProjectsAtom);
+  const auth = useAtomValue(authStateAtom);
   
   const [isProjectEditModalOpen, setIsProjectEditModalOpen] = useState(false)
   const [newProjectInfo, setNewProjectInfo] = useState<ProjectEditState>({});
@@ -60,9 +61,15 @@ function RouteComponent() {
   return (
     <>
       <MainContainer>
-        <SearchConfigController />
-        {projectAddButton}
-        {contents}
+        {
+          auth.isAuthenticated 
+            ? <>
+              <SearchConfigController />
+              {projectAddButton}
+              {contents}
+            </>
+            : <SigninAlertContent />
+        }
       </MainContainer>
       <SideMenu>
         <SideMenuNavigation />
