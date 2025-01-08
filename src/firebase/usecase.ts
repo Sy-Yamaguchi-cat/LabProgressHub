@@ -103,7 +103,7 @@ export const editTask = async ({
     const task = {
       project_uid: doc(projectsCollectionRef, projectUid),
       task_name: taskName,
-      ...(comment && { comment }),
+      comment: comment ?? null,
       order,
     };
     const documentRef =
@@ -204,11 +204,9 @@ export const editProgress = async ({
       project_uid: doc(projectsCollectionRef, projectUid),
       task_uid: doc(tasksCollectionRef, taskUid),
       user_uid: doc(usersCollectionRef, userUid),
-      ...(deadline && {
-        deadline: format(deadline, "yyyy-MM-dd"),
-      }),
-      ...(percentage && { percentage }),
-      ...(text ? { text } : { text: null }),
+      deadline: deadline != null ? format(deadline, "yyyy-MM-dd") : null,
+      percentage: percentage ?? null,
+      text: text ?? null,
     };
 
     const documentRef = progressUid
