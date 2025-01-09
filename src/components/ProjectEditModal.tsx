@@ -9,7 +9,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 
-
 import { DatePicker } from "@mui/x-date-pickers";
 
 import { styled } from "@mui/material/styles";
@@ -20,50 +19,57 @@ import { useState } from "react";
 
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 }));
 const ButtonContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-start",
   marginTop: theme.spacing(3),
-  gap: theme.spacing(2)
+  gap: theme.spacing(2),
 }));
 
-export type ProjectEditState = Partial<Omit<Project, "tasks" | "assignedUsers">>;
+export type ProjectEditState = Partial<
+  Omit<Project, "tasks" | "assignedUsers">
+>;
 export type Props = {
   open: boolean;
   onClose: () => void;
   state: ProjectEditState;
   onChange: (newState: ProjectEditState) => void;
 };
-export default function ProjectEditModal({ open, onClose, state, onChange }: Props) {
+export default function ProjectEditModal({
+  open,
+  onClose,
+  state,
+  onChange,
+}: Props) {
   const [error, setError] = useState<string | null>(null);
-  const title = state.uid ? "Edit the project" :  "Create a new project"
-  const executeText = state.uid ? "Edit" :  "Create";
+  const title = state.uid ? "Edit the project" : "Create a new project";
+  const executeText = state.uid ? "Edit" : "Create";
   const triggerEditProject = async () => {
     setError(null);
     if (!state.projectName) {
-        setError("Project name is not filled.");
-        return;
+      setError("Project name is not filled.");
+      return;
     }
     if (state.description == undefined) {
-        setError("Description is not filled.");
-        return;
+      setError("Description is not filled.");
+      return;
     }
     if (state.startDate == undefined) {
-        setError("Start date is not filled.");
-        return;
+      setError("Start date is not filled.");
+      return;
     }
     if (state.endDate == undefined) {
-        setError("End date is not filled.");
-        return;
+      setError("End date is not filled.");
+      return;
     }
     await editProject({
-        projectName: state.projectName,
-        description: state.description,
-        startDate: state.startDate,
-        endDate: state.endDate,
-        projectUid: state.uid
+      projectName: state.projectName,
+      description: state.description,
+      startDate: state.startDate,
+      endDate: state.endDate,
+      projectUid: state.uid,
     });
     onClose();
   };
@@ -80,7 +86,7 @@ export default function ProjectEditModal({ open, onClose, state, onChange }: Pro
       setError("Failed to delete the project. Please try again.");
       console.error(err);
     }
-  }
+  };
   return (
     <>
       <Modal open={open} onClose={onClose}>
@@ -91,7 +97,10 @@ export default function ProjectEditModal({ open, onClose, state, onChange }: Pro
             left: { md: "50%" },
             transform: { md: "translate(-50%, -50%)" },
             width: { md: "50%" },
-            padding: theme.spacing(5)
+            maxHeight: "100%",
+            maxWidth: "100%",
+            overflow: "scroll",
+            padding: theme.spacing(5),
           })}
         >
           <Typography variant="h3" gutterBottom>
@@ -108,7 +117,7 @@ export default function ProjectEditModal({ open, onClose, state, onChange }: Pro
                 onChange={(evt) =>
                   onChange({
                     ...state,
-                    projectName: evt.target.value
+                    projectName: evt.target.value,
                   })
                 }
                 placeholder="ProjectX"
@@ -123,7 +132,7 @@ export default function ProjectEditModal({ open, onClose, state, onChange }: Pro
                 onChange={(evt) =>
                   onChange({
                     ...state,
-                    description: evt.target.value
+                    description: evt.target.value,
                   })
                 }
               />
@@ -135,7 +144,7 @@ export default function ProjectEditModal({ open, onClose, state, onChange }: Pro
                 onChange={(newValue) =>
                   onChange({
                     ...state,
-                    startDate: newValue ?? undefined
+                    startDate: newValue ?? undefined,
                   })
                 }
               />
@@ -147,33 +156,41 @@ export default function ProjectEditModal({ open, onClose, state, onChange }: Pro
                 onChange={(newValue) =>
                   onChange({
                     ...state,
-                    endDate: newValue ?? undefined
+                    endDate: newValue ?? undefined,
                   })
                 }
               />
             </FormGrid>
           </Grid>
           <ButtonContainer>
-            <Button variant="contained" color="primary" onClick={triggerEditProject}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={triggerEditProject}
+            >
               {executeText}
             </Button>
-            {state.uid && <Button variant="contained" color="error" onClick={() => setConfirmOpen(true)}>
-              Delete
-            </Button>}
+            {state.uid && (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setConfirmOpen(true)}
+              >
+                Delete
+              </Button>
+            )}
             <Button variant="outlined" color="secondary" onClick={onClose}>
               Cancel
             </Button>
           </ButtonContainer>
         </Card>
       </Modal>
-      <Dialog
-        open={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-      >
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this project? This action cannot be undone.
+            Are you sure you want to delete this project? This action cannot be
+            undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

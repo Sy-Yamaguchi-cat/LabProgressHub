@@ -20,21 +20,20 @@ import { Project } from "@/domain/project";
 
 import { usersAtom } from "@/firebase/store";
 import { useAtomValue } from "jotai";
-import { useAtomCallback } from 'jotai/utils'
+import { useAtomCallback } from "jotai/utils";
 import { assignUser, unAssignUser } from "@/firebase/usecase";
 import { authStateAtom } from "@/firebase/authentication";
 import { assignedUsersAtomFamily } from "@/firebase/firestore";
 
-
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 }));
 const ButtonContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-start",
   marginTop: theme.spacing(3),
-  gap: theme.spacing(2)
+  gap: theme.spacing(2),
 }));
 
 export type Props = {
@@ -46,15 +45,16 @@ export default function UserAssignModal({ open, onClose, project }: Props) {
   const [error, setError] = useState<string | null>(null);
   const users = useAtomValue(usersAtom);
   const triggerUnAssign = useAtomCallback((get, set, userUid: string) => {
-    const assignedUsers = get(assignedUsersAtomFamily(project.uid))
-    const assignedUser = Object.values(assignedUsers)
-      .find(({ userUid : targetUserUid })=> userUid == targetUserUid);
+    const assignedUsers = get(assignedUsersAtomFamily(project.uid));
+    const assignedUser = Object.values(assignedUsers).find(
+      ({ userUid: targetUserUid }) => userUid == targetUserUid,
+    );
     if (!assignedUser) {
       setError(`User ${userUid} is not assigned to this porject.`);
       return;
     }
     return unAssignUser({ assignedUsersUid: assignedUser.uid });
-  })
+  });
   return (
     <Modal open={open} onClose={onClose}>
       <Card
@@ -63,7 +63,10 @@ export default function UserAssignModal({ open, onClose, project }: Props) {
           top: { md: "50%" },
           left: { md: "50%" },
           transform: { md: "translate(-50%, -50%)" },
-          padding: theme.spacing(5)
+          maxWidth: "100%",
+          maxHeight: "100%",
+          overflow: "scroll",
+          padding: theme.spacing(5),
         })}
       >
         <Typography variant="subtitle1" color="textDisabled">
@@ -129,7 +132,7 @@ export default function UserAssignModal({ open, onClose, project }: Props) {
                         onClick={() =>
                           assignUser({
                             projectUid: project.uid,
-                            userUid: user.uid
+                            userUid: user.uid,
                           })
                         }
                       >
@@ -143,10 +146,12 @@ export default function UserAssignModal({ open, onClose, project }: Props) {
           </Table>
         </TableContainer>
         <Typography variant="body1" color="info" sx={{ marginTop: 2 }}>
-          If your name is not listed in the table, you can register yourself on the {" "}
+          If your name is not listed in the table, you can register yourself on
+          the{" "}
           <MuiLink component={Link} color="info" to="./users">
             Users page
-          </MuiLink>.
+          </MuiLink>
+          .
         </Typography>
         <ButtonContainer>
           <Button variant="outlined" color="secondary" onClick={onClose}>

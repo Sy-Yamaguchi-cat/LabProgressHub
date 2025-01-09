@@ -17,24 +17,24 @@ import { useState } from "react";
 
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 }));
 const ButtonContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-start",
   marginTop: theme.spacing(3),
-  gap: theme.spacing(2)
+  gap: theme.spacing(2),
 }));
 
 export type TaskEditState =
   | {
-    type: "new";
-    task: Partial<Task>;
-  }
+      type: "new";
+      task: Partial<Task>;
+    }
   | {
-    type: "edit";
-    task: Partial<Task>;
-  };
+      type: "edit";
+      task: Partial<Task>;
+    };
 export type Props = {
   open: boolean;
   onClose: () => void;
@@ -42,15 +42,21 @@ export type Props = {
   state: TaskEditState;
   onChange: (newState: TaskEditState) => void;
 };
-export default function TaskModal({ open, onClose, project, state, onChange }: Props) {
+export default function TaskModal({
+  open,
+  onClose,
+  project,
+  state,
+  onChange,
+}: Props) {
   const [error, setError] = useState<string | null>(null);
   const titles: Record<Props["state"]["type"], string> = {
     new: "Create a new task",
-    edit: "Edit the task"
+    edit: "Edit the task",
   };
   const executeTexts: Record<Props["state"]["type"], string> = {
     new: "Create",
-    edit: "Edit"
+    edit: "Edit",
   };
 
   const execute = async () => {
@@ -77,7 +83,7 @@ export default function TaskModal({ open, onClose, project, state, onChange }: P
         taskUid,
         taskName,
         comment,
-        order
+        order,
       });
     } else {
       await editTask({
@@ -85,7 +91,7 @@ export default function TaskModal({ open, onClose, project, state, onChange }: P
         taskUid,
         taskName,
         comment,
-        order
+        order,
       });
     }
     onClose();
@@ -115,7 +121,10 @@ export default function TaskModal({ open, onClose, project, state, onChange }: P
             left: { md: "50%" },
             transform: { md: "translate(-50%, -50%)" },
             width: { md: "50%" },
-            padding: theme.spacing(5)
+            maxHeight: "100%",
+            maxWidth: "100%",
+            overflow: "scroll",
+            padding: theme.spacing(5),
           })}
         >
           <Typography variant="subtitle1" color="textDisabled">
@@ -137,8 +146,8 @@ export default function TaskModal({ open, onClose, project, state, onChange }: P
                     ...state,
                     task: {
                       ...state.task,
-                      contentName: evt.target.value ?? ""
-                    }
+                      contentName: evt.target.value ?? "",
+                    },
                   })
                 }
                 placeholder="Chapter1"
@@ -156,8 +165,8 @@ export default function TaskModal({ open, onClose, project, state, onChange }: P
                     ...state,
                     task: {
                       ...state.task,
-                      comment: evt.target.value ?? ""
-                    }
+                      comment: evt.target.value ?? "",
+                    },
                   })
                 }
               />
@@ -167,27 +176,27 @@ export default function TaskModal({ open, onClose, project, state, onChange }: P
             <Button variant="contained" color="primary" onClick={execute}>
               {executeTexts[state.type]}
             </Button>
-            {
-              state.type == "edit" 
-                && state.task.uid != undefined 
-                && <Button variant="contained" color="error" onClick={()=>setConfirmOpen(true)}>
+            {state.type == "edit" && state.task.uid != undefined && (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setConfirmOpen(true)}
+              >
                 Delete
               </Button>
-            }
+            )}
             <Button variant="outlined" color="secondary" onClick={onClose}>
               Cancel
             </Button>
           </ButtonContainer>
         </Card>
       </Modal>
-      <Dialog
-        open={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-      >
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this taks? This action cannot be undone.
+            Are you sure you want to delete this taks? This action cannot be
+            undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

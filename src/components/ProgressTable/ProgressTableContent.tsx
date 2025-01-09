@@ -26,7 +26,7 @@ export function ProgressTableContent({ projectUid, editProject }: Props) {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [taskEditState, setTaskEditState] = useState<TaskEditState>({
     type: "new",
-    task: {}
+    task: {},
   });
 
   const editTask = (taskUid: string) => {
@@ -45,7 +45,7 @@ export function ProgressTableContent({ projectUid, editProject }: Props) {
 
   const [isProgressModalOpen, setIsProgressModalOpen] = useState(false);
   const [progressEditState, setProgressEditState] = useState<ProgressEditState>(
-    { progress: {}, userUid: "", taskUid: "", statusUid: "" }
+    { progress: {}, userUid: "", taskUid: "", statusUid: "" },
   );
 
   const editStatus = (taskUid: string, userUid: string) => {
@@ -55,14 +55,14 @@ export function ProgressTableContent({ projectUid, editProject }: Props) {
       setProgressEditState({
         taskUid,
         userUid,
-        progress: status
+        progress: status,
       });
       setIsProgressModalOpen(true);
     } else {
       setProgressEditState({
         taskUid,
         userUid,
-        progress: {}
+        progress: {},
       });
       setIsProgressModalOpen(true);
     }
@@ -73,18 +73,17 @@ export function ProgressTableContent({ projectUid, editProject }: Props) {
 
   const titleComponent = (
     <Stack direction="row">
-      <Typography sx={{ flexGrow:1 }} variant="h4">
-      {project?.projectName ?? ""}
+      <Typography sx={{ flexGrow: 1 }} variant="h4">
+        {project?.projectName ?? ""}
       </Typography>
       <IconButton
         size="medium"
-        sx={{justifySelf: "end"}}
+        sx={{ justifySelf: "end" }}
         onClick={() => project && editProject(project)}
       >
         <EditIcon fontSize="inherit" />
       </IconButton>
     </Stack>
-    
   );
   const subTitleComponents = project && (
     <>

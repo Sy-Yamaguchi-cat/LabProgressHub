@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
 import { DatePicker } from "@mui/x-date-pickers";
 
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
@@ -16,13 +16,13 @@ import { editProgress } from "@/firebase/usecase";
 
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 }));
 const ButtonContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-start",
   marginTop: theme.spacing(3),
-  gap: theme.spacing(2)
+  gap: theme.spacing(2),
 }));
 
 export type ProgressEditState = {
@@ -38,13 +38,17 @@ export type Props = {
   state: ProgressEditState;
   onChange: (newState: ProgressEditState) => void;
 };
-export default function ProgressModal({ open, onClose, project, state, onChange }: Props) {
+export default function ProgressModal({
+  open,
+  onClose,
+  project,
+  state,
+  onChange,
+}: Props) {
   const [error, setError] = useState<string | null>(null);
-  const task = project.tasks.find(
-    (task) => task.uid == state.taskUid
-  );
+  const task = project.tasks.find((task) => task.uid == state.taskUid);
   const user = Object.values(project.assignedUsers).find(
-    (user) => user.uid == state.userUid
+    (user) => user.uid == state.userUid,
   );
   const execute = async () => {
     setError(null);
@@ -62,7 +66,7 @@ export default function ProgressModal({ open, onClose, project, state, onChange 
       deadline,
       percentage,
       text,
-      progressUid
+      progressUid,
     });
     onClose();
     return;
@@ -76,7 +80,10 @@ export default function ProgressModal({ open, onClose, project, state, onChange 
           left: { md: "50%" },
           transform: { md: "translate(-50%, -50%)" },
           width: { md: "50%" },
-          padding: theme.spacing(5)
+          maxHeight: "100%",
+          maxWidth: "100%",
+          overflow: "scroll",
+          padding: theme.spacing(5),
         })}
       >
         <Typography variant="subtitle1" color="textDisabled">
@@ -108,8 +115,8 @@ export default function ProgressModal({ open, onClose, project, state, onChange 
                     ...state,
                     progress: {
                       ...state.progress,
-                      percentage: value as number
-                    }
+                      percentage: value as number,
+                    },
                   });
                 }}
               />
@@ -128,10 +135,10 @@ export default function ProgressModal({ open, onClose, project, state, onChange 
                       ...state,
                       progress: {
                         ...state.progress,
-                        deadline: undefined
-                      }
-                    })
-                }
+                        deadline: undefined,
+                      },
+                    }),
+                },
               }}
               value={state.progress.deadline ?? null}
               onChange={(newValue) =>
@@ -139,8 +146,8 @@ export default function ProgressModal({ open, onClose, project, state, onChange 
                   ...state,
                   progress: {
                     ...state.progress,
-                    ...(newValue && { deadline: newValue })
-                  }
+                    ...(newValue && { deadline: newValue }),
+                  },
                 })
               }
             />
@@ -156,8 +163,8 @@ export default function ProgressModal({ open, onClose, project, state, onChange 
                   ...state,
                   progress: {
                     ...state.progress,
-                    text: evt.target.value
-                  }
+                    text: evt.target.value,
+                  },
                 })
               }
             />
