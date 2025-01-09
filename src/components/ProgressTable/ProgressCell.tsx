@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+import MuiTableCell from "@mui/material/TableCell";
 import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
@@ -11,6 +12,8 @@ import HoverVisTableCell, { hoverShowClass } from "./HoverVisTableCell";
 import { MemberInfo, Task } from "@/domain/project";
 import { format } from "date-fns";
 import { styled } from "@mui/material";
+import { useAtomValue } from "jotai";
+import { authStateAtom } from "@/firebase/authentication";
 
 export type Props = {
   task: Task;
@@ -18,6 +21,7 @@ export type Props = {
   editStatus: (taskUid: string, userUid: string) => void;
 };
 export default function ProgressCell({ task, user, editStatus }: Props) {
+  const auth = useAtomValue(authStateAtom);
   const status = task.status[user.uid];
   const progressCircle = (
     <ContentBox>
@@ -44,6 +48,8 @@ export default function ProgressCell({ task, user, editStatus }: Props) {
       </Typography>
     </Box>
   );
+  const isEditable =
+    auth.isAuthenticated && auth.user.userEmail == user.userEmail;
   return (
     <HoverVisTableCell key={task.uid}>
       <Stack alignItems="center" spacing={1}>
@@ -53,13 +59,15 @@ export default function ProgressCell({ task, user, editStatus }: Props) {
         </Stack>
         {text}
       </Stack>
-      <IconButton
-        className={hoverShowClass}
-        size="small"
-        onClick={() => editStatus(task.uid, user.uid)}
-      >
-        <EditIcon fontSize="inherit" />
-      </IconButton>
+      {isEditable && (
+        <IconButton
+          className={hoverShowClass}
+          size="small"
+          onClick={() => editStatus(task.uid, user.uid)}
+        >
+          <EditIcon fontSize="inherit" />
+        </IconButton>
+      )}
     </HoverVisTableCell>
   );
 }

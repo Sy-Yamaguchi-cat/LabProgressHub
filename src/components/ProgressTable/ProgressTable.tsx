@@ -11,7 +11,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 
 import TaskTitleCell from "./TaskTitleCell";
 import ProgressCell from "./ProgressCell";
@@ -30,7 +30,7 @@ export default function ProgressTable({
   addTask,
   assignUser,
   editStatus,
-  editTask
+  editTask,
 }: Props) {
   return (
     <TableContainer component={Paper}>
@@ -78,9 +78,7 @@ export default function ProgressTable({
           ))}
           <TableRow>
             <TableCell component="th" scope="row">
-              <IconButton
-                onClick={assignUser}
-              >
+              <IconButton onClick={assignUser}>
                 <PersonAddAltIcon />
               </IconButton>
             </TableCell>
