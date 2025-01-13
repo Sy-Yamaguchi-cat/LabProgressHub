@@ -127,6 +127,7 @@ export default function ProgressModal({
               Deadline
             </Typography>
             <DatePicker
+              format="yyyy-MM-dd"
               slotProps={{
                 field: {
                   clearable: true,
@@ -139,14 +140,17 @@ export default function ProgressModal({
                       },
                     }),
                 },
+                actionBar: {
+                  actions: ["clear"],
+                },
               }}
               value={state.progress.deadline ?? null}
-              onChange={(newValue) =>
+              onAccept={(newValue) =>
                 onChange({
                   ...state,
                   progress: {
                     ...state.progress,
-                    ...(newValue && { deadline: newValue }),
+                    deadline: newValue ?? undefined,
                   },
                 })
               }
@@ -157,7 +161,7 @@ export default function ProgressModal({
               Text
             </Typography>
             <TextareaAutosize
-              value={state.progress.text}
+              value={state.progress.text ?? ""}
               onChange={(evt) =>
                 onChange({
                   ...state,

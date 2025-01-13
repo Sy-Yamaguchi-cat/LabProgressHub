@@ -11,7 +11,7 @@ import {
   doc,
   runTransaction,
   deleteDoc,
-  getDoc,
+  deleteField,
   getDocs,
   DocumentReference,
 } from "firebase/firestore";
@@ -204,9 +204,10 @@ export const editProgress = async ({
       project_uid: doc(projectsCollectionRef, projectUid),
       task_uid: doc(tasksCollectionRef, taskUid),
       user_uid: doc(usersCollectionRef, userUid),
-      deadline: deadline != null ? format(deadline, "yyyy-MM-dd") : null,
-      percentage: percentage ?? null,
-      text: text ?? null,
+      deadline:
+        deadline != null ? format(deadline, "yyyy-MM-dd") : deleteField(),
+      percentage: percentage ?? deleteField(),
+      text: text ?? deleteField(),
     };
 
     const documentRef = progressUid
